@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Foxtech | FastAPI</title>
+		<link rel="stylesheet" href="assests/style.css" />
+	</head>
+
+	<body>
+		<div class="wrap">
+			<header id="header"></header>
+
+			<main>
+				<section>
+					<article class="card">
+						<!-- Lesson --------------------------------------------------------->
+						<div class="lesson">
+							<h2 id="FastAPI">What is FastAPI</h2>
+							<div class="meta">
+								FastAPI is a modern, high-performance Python web framework used to build APIs and backend applications.
+							</div>
+
+							
+                            <ul>
+							    <li>FastAPI is a Python framework for building APIs.</li>
+                                <li>It is used mainly for developing backend applications and web services.</li>
+                                <li>FastAPI allows different applications to communicate with each other through APIs.</li>
+                                <li>It is designed to be fast, simple, and easy to use.</li>
+                                <li>FastAPI supports automatic API documentation.</li>
+                                <li>It uses Python type hints to validate data and improve development.</li>
+                                <li>It supports common HTTP methods such as GET, POST, PUT, and DELETE.</li>
+                                <li>FastAPI can work with databases, authentication systems, and frontend applications.</li>
+                                <li>It is commonly used for web applications, IoT systems, machine-learning APIs, and microservices.</li>
+						    </ul>
+
+
+							
+                            
+						</div>
+						<h2 id="FastAP"> FastAPI Installation</h2>
+						<p>Commands to create a FastAPI:</p>
+						<pre><code><span class="code-heading">Terminal</span>
+
+# create venv (example)
+python -m venv .venv
+
+# Virtual environment run command
+# source .venv/bin/activate             # linux / mac
+.venv\Scripts\activate                  # windows
+
+# install package
+pip intall fastapi uvicorn
+
+# run development server
+uvicorn app:app				#appName
+
+</code></pre>
+						<p id="project-layout">Sample layout</p>
+						<pre><code>mysite/
+├─ mysite/        # project settings
+  ├─ main.py
+  ├─ requirment.py
+  └─ README.md
+
+</code></pre>
+
+
+					</article>
+				</section>
+
+				
+			</main>
+			<div id="lightbox">
+				<span id="close">&times;</span>
+				<img id="lightbox-img" />
+				<div id="prev" class="nav">&#10094;</div>
+				<div id="next" class="nav">&#10095;</div>
+			</div>
+			<div id="footer"></div>
+		</div>
+
+		<script src="assests/scripts.js"></script>
+	</body>
+</html>

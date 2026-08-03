@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Foxtech | Template</title>
+		<link rel="stylesheet" href="assests/style.css" />
+	</head>
+
+	<body>
+		<div class="wrap">
+			<header id="header"></header>
+
+			<main>
+				<section>
+					<article class="card">
+						<span>
+							<pre><code><span class="code-heading">Terminal</span>
+# Create code
+
+</code></pre>
+
+							<div>
+								<img class="gallery-img img" src="img/1.png" alt="" />
+							</div>
+
+							<p id="project-layout">Sample layout</p>
+							<pre><code>mysite/
+├─ manage.py
+├─ mysite/        # project settings
+│  ├─ __init__.py
+│  ├─ settings.py
+│  └─ wsgi.py
+└─ core/          # app
+   ├─ __init__.py
+   └─ views.py
+</code></pre>
+
+							<hr />
+							<br />
+							<div class="lesson">
+								<div class="bold" id="html-rendering">HTML Rendering</div>
+								<div class="meta">Renders a template. (Urls, Views)</div>
+
+								<p>Connect app.</p>
+								<pre><code><div class="code-heading">myproject/settings.py</div>
+...
+INSTALLED_APPS = [
+	...
+	'core',
+]
+...
+</code></pre>
+
+								<!-- Cheat sheets ------------------------------------------------------------------------>
+
+								<h2 id="cheatsheet">Cheat sheet</h2>
+								<pre><code><div class="code-heading">Common commands</div>
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+</code></pre>
+
+								<div style="margin-top: 12px; display: flex; gap: 8px">
+									<button class="btn" onclick="window.print()">
+										Print lesson
+									</button>
+								</div>
+							</div>
+						</span>
+					</article>
+				</section>
+
+				<aside>
+					<div class="card">
+						<h3>Contents</h3>
+						<ul class="toc">
+							<li><a href="#project-layout">Getting started</a></li>
+						</ul>
+
+						<h4>Resources</h4>
+						<ul>
+							<li>
+								<a href="https://www.djangoproject.com/">
+									Django docs — read the tutorial and refs</a
+								>
+							</li>
+						</ul>
+					</div>
+				</aside>
+			</main>
+
+			<div id="lightbox">
+				<span id="close">&times;</span>
+				<img id="lightbox-img" />
+				<div id="prev" class="nav">&#10094;</div>
+				<div id="next" class="nav">&#10095;</div>
+			</div>
+			<div id="footer"></div>
+		</div>
+		<script src="assests/scripts.js"></script>
+	</body>
+</html>

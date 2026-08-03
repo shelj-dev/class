@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Foxtech | GET & POST Data</title>
+		<link rel="stylesheet" href="assests/style.css" />
+	</head>
+
+	<body>
+		<div class="wrap">
+			<header id="header"></header>
+
+			<main>
+				<section>
+					<article class="card">
+						<div class="lesson">
+							<h1><u>Create a Python File</u></h1>
+                            <div class="meta">Create <code>app.py</code>,</div>
+							<pre><code><div class="code-heading">mysite/app.py</div>
+from fastapi import FastAPI
+
+app=FastAPI()
+
+@app.get("/")
+def roo():
+    return{"message":"hello"}
+</code></pre>
+
+							<p>Run:</p>
+							<pre><code><div class="code-heading">Terminal</div>
+uvicorn app:app	
+</code></pre>
+						</div>
+
+						<div>
+							<img class="gallery-img img" src="img/1.png" alt="" />
+						</div>
+
+						<br />
+						<hr />
+						<!-- forms -->
+						<div class="lesson">
+							<h2 id="get-data">Swegger UI</h2>
+                            <p>FastAPI provides an interactive documentation page called Swagger UI.</p>
+							
+
+							<!-- URLs -->
+							<pre><code><div class="code-heading">mysite/app.py</div>
+......
+@app.get("/hello")
+def roo():
+    return{"message":"hello"}
+</code></pre>					
+
+							<h1>Output</h1>
+
+							<div>
+								<img class="gallery-img img" src="img/2.png" alt="" />
+
+								<img class="gallery-img img" src="img/3.png" alt="" />
+							</div>
+							
+						
+						</div>
+                    
+
+                        <div class="lesson">
+							<h2 id="get-data">Postman</h2>
+                            <p>Postman is a tool used to develop, test, and debug APIs.</p>
+                            <h4 id="get-data">Extension install</h4>
+							<div>
+								<img class="gallery-img img" src="img/4.png" alt="" />
+
+								
+							</div>
+							<h4 id="get-data">Create Postman HTTP request</h4>
+							<div>
+								<img class="gallery-img img" src="img/5.png" alt="" />
+							</div>
+						
+						</div>
+					</article>
+				</section>
+
+				
+			</main>
+
+			<div id="lightbox">
+				<span id="close">&times;</span>
+				<img id="lightbox-img" />
+				<div id="prev" class="nav">&#10094;</div>
+				<div id="next" class="nav">&#10095;</div>
+			</div>
+			<div id="footer"></div>
+		</div>
+		<script src="assests/scripts.js"></script>
+	</body>
+</html>
