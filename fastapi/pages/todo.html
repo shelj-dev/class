@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Foxtech | FASTAPI Todo App</title>
+		<link rel="stylesheet" href="assests/style.css" />
+	</head>
+
+	<body>
+		<div class="wrap">
+			<header id="header"></header>
+
+			<main>
+				<section>
+					<article class="card">
+						<h2 id="django-todo">FASTAPI Todo Application</h2>
+						<p class="meta">
+							GET, PUT, POST, DELETE todo items
+						</p>
+
+						<p>
+							This project demonstrates a <strong>basic Todo application</strong>
+							using FASTAPI. Each user can Get,Post,update and delete the todo items.
+						</p>
+
+						<!-- ================= PROJECT SETUP ================= -->
+
+						<h3>Project & App Setup</h3>
+						<p>
+							Create a FastAPI project and build a To-Do application..
+						</p>
+
+						<pre><code><span class="code-heading">Terminal</span>
+Create FastAPI To-Do Project
+mkdir Todo_project
+cd Todo_project
+python -m venv venv
+pip install fastapi uvicorn
+Create main.py
+uvicorn main:app --reload
+Open Swagger:
+http://127.0.0.1:8000/docs
+</code></pre>
+
+						
+
+						<!-- ================= MODEL ================= -->
+
+						<h3>Todo Model</h3>
+						<p>
+							The To-Do model defines the structure of tasks created and managed through the FastAPI API.
+						</p>
+
+						<pre><code><span class="code-heading">Todo_app/models.py</span>
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+class Todo(BaseModel):
+    user_id: int
+    title: str
+    completed: bool = False
+</code></pre>
+
+						
+
+						
+
+						<h3>Steps For Creating FASTAPI TODO List</h3>
+
+<p>
+    A simple Todo API is created using FastAPI. Users can create, view,
+    update, and delete Todo items using REST API methods.
+</p>
+
+<!-- ================= GET ================= -->
+
+<h3>GET - View Todo Items</h3>
+
+<p>
+    The GET method is used to retrieve Todo items from the API.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+@app.get("/todos")
+def get_todos():
+    return todos
+</code></pre>
+
+<p>
+    This endpoint returns all Todo items.
+</p>
+
+<pre><code><span class="code-heading">Endpoint</span>
+GET /todos
+</code></pre>
+                            <div>
+								<img class="gallery-img img" src="img/01.png" alt="" />
+                                <img class="gallery-img img" src="img/02.png" alt="" />
+                                <img class="gallery-img img" src="img/03.png" alt="" />
+
+							</div>
+
+
+<!-- ================= POST ================= -->
+
+<h3>POST - Create Todo Item</h3>
+
+<p>
+    The POST method is used to create a new Todo item.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+@app.post("/todos")
+def create_todo(todo: Todo):
+
+    new_todo = {
+        "id": len(todos) + 1,
+        "title": todo.title,
+        "completed": todo.completed
+    }
+
+    todos.append(new_todo)
+
+    return new_todo
+</code></pre>
+
+<h4>Request Body</h4>
+
+<pre><code>{
+    "title": "Learn FastAPI",
+    "completed": false
+}
+</code></pre>
+
+<p>
+    The new Todo item is added to the Todo list.
+</p>
+                            <div>
+								<img class="gallery-img img" src="img/04.png" alt="" />
+                                <img class="gallery-img img" src="img/05.png" alt="" />
+                                
+
+							</div>
+
+
+<!-- ================= PUT ================= -->
+
+<h3>PUT - Update Todo Item</h3>
+
+<p>
+    The PUT method is used to update an existing Todo item.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+@app.put("/todos/{todo_id}")
+def update_todo(todo_id: int, todo: Todo):
+
+    for item in todos:
+
+        if item["id"] == todo_id:
+            item["title"] = todo.title
+            item["completed"] = todo.completed
+
+            return item
+</code></pre>
+
+<h4>Request</h4>
+
+<pre><code>PUT /todos/1
+</code></pre>
+
+<h4>Request Body</h4>
+
+<pre><code>{
+    "title": "Learn FastAPI and Swagger",
+    "completed": true
+}
+</code></pre>
+                            <div>
+								<img class="gallery-img img" src="img/06.png" alt="" />
+                                <img class="gallery-img img" src="img/07.png" alt="" />
+                                
+
+							</div>
+
+
+<!-- ================= DELETE ================= -->
+
+<h3>DELETE - Delete Todo Item</h3>
+
+<p>
+    The DELETE method is used to remove a Todo item.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+@app.delete("/todos/{todo_id}")
+def delete_todo(todo_id: int):
+
+    for todo in todos:
+
+        if todo["id"] == todo_id:
+            todos.remove(todo)
+
+            return {"message": "Todo deleted"}
+</code></pre>
+
+<h4>Request</h4>
+
+<pre><code>DELETE /todos/1
+</code></pre>
+
+<h4>Response</h4>
+
+<pre><code>{
+    "message": "Todo deleted"
+}
+</code></pre>
+                            <div>
+								<img class="gallery-img img" src="img/08.png" alt="" />
+                                <img class="gallery-img img" src="img/09.png" alt="" />
+                                
+
+							</div>
+
+
+<!-- ================= SWAGGER ================= -->
+
+<h3>Testing API Using Swagger</h3>
+
+<p>
+    FastAPI provides automatic interactive API documentation using Swagger UI.
+    It can be used to test GET, POST, PUT, and DELETE operations.
+</p>
+
+<pre><code><span class="code-heading">Swagger UI</span>
+http://127.0.0.1:8000/docs
+</code></pre>
+
+<h4>Available API Operations</h4>
+
+<pre><code>
+GET     /todos          → View Todo items
+POST    /todos          → Create Todo item
+PUT     /todos/{id}     → Update Todo item
+DELETE  /todos/{id}     → Delete Todo item
+</code></pre>
+
+
+<!-- ================= CRUD ================= -->
+
+<h3>CRUD Operations</h3>
+
+<p>
+    The Todo application implements the four basic CRUD operations.
+</p>
+
+<pre><code>
+CREATE  → POST
+READ    → GET
+UPDATE  → PUT
+DELETE  → DELETE
+</code></pre>
+
+
+<!-- ================= PROJECT STRUCTURE ================= -->
+
+<h3>Project Structure</h3>
+
+<p>
+    Basic project structure for the FastAPI Todo application:
+</p>
+
+<pre><code>
+Todo_project/
+├── main.py
+└── venv/
+</code></pre>
+
+<p>
+    This completes a beginner-friendly FastAPI Todo application
+    using GET, POST, PUT, DELETE, and Swagger UI.
+</p>
+
+                    </article>
+                </section>
+            </main>
+        </div>
+        <script src="assests/scripts.js"></script>
+    </body>
+</html>
