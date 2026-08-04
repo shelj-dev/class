@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Foxtech | Routing</title>
+		<link rel="stylesheet" href="assests/style.css" />
+	</head>
+
+	<body>
+		<div class="wrap">
+			<header id="header"></header>
+
+			<main>
+				<section>
+					<article class="card">
+						<div class="lesson">
+							<h1><u>Pydantic Models</u></h1>
+                            <div >
+								Pydantic is a Python library used by FastAPI for data validation, serialization, and type checking.
+                                It ensures that the data received from the client is valid before processing the request.
+							</div>
+							
+
+							 
+                            <br>
+                            <h2 id="models">1.BaseModel</h2>
+                            <div>
+                                BaseModel is the base class provided by Pydantic. 
+                                It is used to define the structure of request and response data.
+                            </div>
+							<pre><code><div class="code-heading">mysite/main.py</div>
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class Product(BaseModel):
+    id: int
+    name: str
+    price: float
+
+@app.post("/product")
+def create_product(product: Product):
+    return product
+</code></pre>
+                            <h2 id="models">2.Field Validation</h2>
+                            <div>
+                                Field() is used to add validation rules such as minimum length, 
+                                maximum length, default values, descriptions, and numeric limits.
+                            </div>
+                            
+                            <pre><code><div class="code-heading">mysite/main.py</div>
+
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
+
+app = FastAPI()
+
+class Product(BaseModel):
+    id: int
+    name: str = Field(min_length=3, max_length=20)
+    price: float = Field(gt=0)
+
+@app.post("/product")
+def create_product(product: Product):
+    return product
+</code></pre>
+                        
+						<br />
+						<div class="lesson">
+							<h2 id="models">3.JSONResponse</h2>
+                            <p>
+								JSONResponse is used to send a custom JSON response with a specific status code.
+							</p>
+							
+							<pre><code><div class="code-heading">mysite/main.py</div>
+
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
+
+app = FastAPI()
+
+@app.get("/message")
+def get_message():
+    return JSONResponse(
+        content={"message": "Product Added Successfully"},
+        status_code=201
+    )
+</code></pre>
+
+                            <h2 id="models">4.HTMLResponse</h2>
+                            <p>
+								HTMLResponse is used to return HTML content instead of JSON.
+							</p>
+    						<pre><code><div class="code-heading">mysite/main.py</div>
+
+
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+
+app = FastAPI()
+
+@app.get("/", response_class=HTMLResponse)
+def home():
+    return """
+    <html>
+        <body>
+            <h1>Welcome to FastAPI</h1>
+        </body>
+    </html>
+    """
+</code></pre>
+
+                            <h2 id="models">5.FileResponse</h2>
+                            <p>
+								FileResponse is used to send a file (PDF, image, text, etc.) from the server to the client.
+							</p>							
+							<pre><code><div class="code-heading">mysite/main.py</div>
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
+
+app = FastAPI()
+
+@app.get("/download")
+def download_file():
+    return FileResponse("sample.pdf")
+</code></pre>							
+								<hr />
+							</div>
+						</div>
+					</article>
+				</section>
+
+				
+			</main>
+
+			<div id="lightbox">
+				<span id="close">&times;</span>
+				<img id="lightbox-img" />
+				<div id="prev" class="nav">&#10094;</div>
+				<div id="next" class="nav">&#10095;</div>
+			</div>
+			<div id="footer"></div>
+		</div>
+		<script src="assests/scripts.js"></script>
+	</body>
+</html>
