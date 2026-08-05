@@ -58,10 +58,12 @@ uvicorn main:app				#python file name:variable name
 </code></pre>
 						<p id="project-layout">Sample layout</p>
 						<pre><code>mysite/
-├─ mysite/            # project settings
-  ├─ main.py
-  ├─ requirment.py    #install package file name
-  └─ README.md
+website/
+│── main.py
+│── database.py
+│── model.py        ← Pydantic model
+│── schemas.py      ← SQLAlchemy model
+│── products.db
 
 </code></pre>
 

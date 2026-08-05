@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Foxtech | Routing</title>
+		<title>Foxtech | Pydantic</title>
 		<link rel="stylesheet" href="assests/style.css" />
 	</head>
 
@@ -16,7 +16,7 @@
 					<article class="card">
 						<div class="lesson">
 							<h1><u>Pydantic Models</u></h1>
-                            <div >
+                            <div class="meta">
 								Pydantic is a Python library used by FastAPI for data validation, serialization, and type checking.
                                 It ensures that the data received from the client is valid before processing the request.
 							</div>
@@ -25,7 +25,7 @@
 							 
                             <br>
                             <h2 id="models">1.BaseModel</h2>
-                            <div>
+                            <div class="meta">
                                 BaseModel is the base class provided by Pydantic. 
                                 It is used to define the structure of request and response data.
                             </div>
@@ -46,7 +46,7 @@ def create_product(product: Product):
     return product
 </code></pre>
                             <h2 id="models">2.Field Validation</h2>
-                            <div>
+                            <div class="meta">
                                 Field() is used to add validation rules such as minimum length, 
                                 maximum length, default values, descriptions, and numeric limits.
                             </div>
@@ -71,7 +71,7 @@ def create_product(product: Product):
 						<br />
 						<div class="lesson">
 							<h2 id="models">3.JSONResponse</h2>
-                            <p>
+                            <p class="meta">
 								JSONResponse is used to send a custom JSON response with a specific status code.
 							</p>
 							
@@ -91,7 +91,7 @@ def get_message():
 </code></pre>
 
                             <h2 id="models">4.HTMLResponse</h2>
-                            <p>
+                            <p class="meta">
 								HTMLResponse is used to return HTML content instead of JSON.
 							</p>
     						<pre><code><div class="code-heading">mysite/main.py</div>
@@ -105,16 +105,18 @@ app = FastAPI()
 @app.get("/", response_class=HTMLResponse)
 def home():
     return """
-    <html>
-        <body>
-            <h1>Welcome to FastAPI</h1>
-        </body>
-    </html>
-    """
+
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Welcome to FastAPI&lt;/h1&gt;    
+  &lt;/body&gt;
+&lt;/html&gt;
+    	"""
+
 </code></pre>
 
                             <h2 id="models">5.FileResponse</h2>
-                            <p>
+                            <p class="meta">
 								FileResponse is used to send a file (PDF, image, text, etc.) from the server to the client.
 							</p>							
 							<pre><code><div class="code-heading">mysite/main.py</div>

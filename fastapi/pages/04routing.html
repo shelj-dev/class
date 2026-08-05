@@ -16,7 +16,7 @@
 					<article class="card">
 						<div class="lesson">
 							<h1><u>Routing</u></h1>
-                            <div>
+                            <div class="meta">
 								Routing is the process of defining<strong>URL paths (endpoints)</strong>and 
                                 specifying which function hould handle a client's request. 
                                 FastAPI uses decorators like @app.get(), @app.post(), @app.put(), @app.Delete().
@@ -71,7 +71,7 @@ http://127.0.0.1:8000/products
 						<!-- forms -->
 						<div class="lesson">
 							<h2 id="models">1.GET Request</h2>
-                            <p>
+                            <p class="meta">
 								A GET request is used to retrieve data from the server. It does not modify any data.
 							</p>
 							<div class="meta"> create GET <code>main.py</code>,</div>
@@ -93,7 +93,7 @@ def get_all_product_by_id(id:int):
 						    </div>
 
                             <h2 id="models">2.POST Request</h2>
-                            <p>
+                            <p class="meta">
 								A POST request is used to create new data on the server.
 							</p>
 							<div class="meta"> Add POST <code>main.py</code>,</div>
@@ -113,7 +113,7 @@ def add_product(product:Product):
 						    </div>
 
                             <h2 id="models">3.PUT Request</h2>
-                            <p>
+                            <p class="meta">
 								A PUT request is used to replace an entire existing resource.
 							</p>
 							<div class="meta"> Update PUT <code>main.py</code>,</div>
@@ -135,7 +135,7 @@ def update_product(id: int, product: Product):
 						    </div>
 							
                             <h2 id="models">5.Delete Request</h2>
-                            <p>
+                            <p class="meta">
 								The DELETE method is used to remove data from the server.
 							</p>
 							<div class="meta">Delete <code>main.py</code>,</div>
@@ -160,7 +160,7 @@ def delete_product(id: int):
 							
 
                             <h2 id="models">Path Parameters</h2>
-                            <p>
+                            <p class="meta">
 								Path Parameters are values that are included directly in the URL path. 
                                 They are used to identify a specific resource, such as a product, student, or user.
 							</p>
@@ -180,7 +180,7 @@ GET /product/1
 </code></pre>
 
                             <h2 id="models">Quary Parameters</h2>
-                            <p>
+                            <p class="meta">
 								Query Parameters are values passed after the ? symbol in the URL.
                                 They are commonly used for searching, filtering, sorting, and pagination.
 							</p>
@@ -203,7 +203,7 @@ GET /search?name=Laptop&price=50000
 </code></pre>
 
                             <h2 id="models">Request Headers</h2>
-                            <p>
+                            <p class="meta">
 								Request Headers are additional pieces of information sent by the client along with an HTTP request. 
                                 They provide details such as the content type, authentication token, browser information, and language.
 							</p>
