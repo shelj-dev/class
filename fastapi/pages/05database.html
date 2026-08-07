@@ -31,9 +31,9 @@
                                 It is used to define the structure of request and response data.
                             </div>
 							<pre><code><div class="code-heading">Terminal</div>
-pip install fastapi uvicorn sqlalchemy
+pip install sqlalchemy
 </code></pre>
-                            <h2 id="models">2.Create database.py</h2>
+                            <h2 id="models">2.Create database</h2>
                             
                             <pre><code><div class="code-heading">mysite/database.py</div>
 
@@ -61,7 +61,13 @@ Base = declarative_base()
 							
 							
 							<pre><code><div class="code-heading">mysite/models.py</div>
-.......
+from pydantic import BaseModel
+
+class Product(BaseModel):
+    id:int
+    name:str
+    description:str
+    
 
     class Config:
         from_attributes = True
@@ -82,7 +88,7 @@ class Product(Base):
 </code></pre>
 							
 							<pre><code><div class="code-heading">mysite/main.py</div>
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from sqlalchemy.orm import Session
 
 import schemas
@@ -110,6 +116,8 @@ def get_db():
                             <h2 id="models">4.Add POST Database</h2>
                             
                             <pre><code><div class="code-heading">mysite/main.py</div>
+from fastapi import Depends
+.......
 
 @app.post("/products/db")
 def add_product_db(product: Product, db: Session = Depends(get_db)):

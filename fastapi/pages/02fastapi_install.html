@@ -50,24 +50,9 @@ python -m venv .venv
 .venv\Scripts\activate                  # windows
 
 # install package
-pip intall fastapi uvicorn
+pip install "fastapi[standard]"
 
-# run development server
-uvicorn main:app				#python file name:variable name
-
-</code></pre>
-						<p id="project-layout">Sample layout</p>
-						<pre><code>mysite/
-website/
-│── main.py
-│── database.py
-│── model.py        ← Pydantic model
-│── schemas.py      ← SQLAlchemy model
-│── products.db
-
-</code></pre>
-
-
+python -m pip install "fastapi[standard]"
 					</article>
 				</section>
 
