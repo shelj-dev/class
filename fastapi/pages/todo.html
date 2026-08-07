@@ -73,34 +73,6 @@ class Todo(BaseModel):
     update, and delete Todo items using REST API methods.
 </p>
 
-<!-- ================= GET ================= -->
-
-<h3>GET - View Todo Items</h3>
-
-<p>
-    The GET method is used to retrieve Todo items from the API.
-</p>
-
-<pre><code><span class="code-heading">main.py</span>
-@app.get("/todos")
-def get_todos():
-    return todos
-</code></pre>
-
-<p>
-    This endpoint returns all Todo items.
-</p>
-
-<pre><code><span class="code-heading">Endpoint</span>
-GET /todos
-</code></pre>
-                            <div>
-								<img class="gallery-img img" src="img/01.png" alt="" />
-                                <img class="gallery-img img" src="img/02.png" alt="" />
-                                <img class="gallery-img img" src="img/03.png" alt="" />
-
-							</div>
-
 
 <!-- ================= POST ================= -->
 
@@ -111,18 +83,25 @@ GET /todos
 </p>
 
 <pre><code><span class="code-heading">main.py</span>
-@app.post("/todos")
-def create_todo(todo: Todo):
+# Add todo to database
+@app.post("/todos/db")
+def add_todo_db(todo: Todo, db: Session = Depends(get_db)):
 
-    new_todo = {
-        "id": len(todos) + 1,
-        "title": todo.title,
-        "completed": todo.completed
+    new_todo = schemas.Todo(
+        id=todo.id,
+        title=todo.title,
+        description=todo.description,
+        completed=todo.completed
+    )
+
+    db.add(new_todo)
+    db.commit()
+    db.refresh(new_todo)
+
+    return {
+        "message": "Todo Added Successfully",
+        "data": new_todo
     }
-
-    todos.append(new_todo)
-
-    return new_todo
 </code></pre>
 
 <h4>Request Body</h4>
@@ -143,6 +122,43 @@ def create_todo(todo: Todo):
 
 							</div>
 
+<!-- ================= GET ================= -->
+
+<h3>GET - View Todo Items</h3>
+
+<p>
+    The GET method is used to retrieve Todo items from the API.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+# Get todo from database
+@app.get("/todos/db/{id}")
+def get_todo_db(id: int, db: Session = Depends(get_db)):
+
+    todo = db.query(schemas.Todo).filter(
+        schemas.Todo.id == id
+    ).first()
+
+    if todo is None:
+        return {"message": "Todo not found"}
+
+    return todo
+</code></pre>
+
+<p>
+    This endpoint returns all Todo items.
+</p>
+
+<pre><code><span class="code-heading">Endpoint</span>
+GET /todos
+</code></pre>
+                            <div>
+								<img class="gallery-img img" src="img/01.png" alt="" />
+                                <img class="gallery-img img" src="img/02.png" alt="" />
+                                <img class="gallery-img img" src="img/03.png" alt="" />
+
+							</div>
+
 
 <!-- ================= PUT ================= -->
 
@@ -153,16 +169,32 @@ def create_todo(todo: Todo):
 </p>
 
 <pre><code><span class="code-heading">main.py</span>
-@app.put("/todos/{todo_id}")
-def update_todo(todo_id: int, todo: Todo):
+# Update todo in database
+@app.put("/todos/db/{id}")
+def update_todo_db(
+    id: int,
+    todo: Todo,
+    db: Session = Depends(get_db)
+):
 
-    for item in todos:
+    db_todo = db.query(schemas.Todo).filter(
+        schemas.Todo.id == id
+    ).first()
 
-        if item["id"] == todo_id:
-            item["title"] = todo.title
-            item["completed"] = todo.completed
+    if db_todo is None:
+        return {"message": "Todo not found"}
 
-            return item
+    db_todo.title = todo.title
+    db_todo.description = todo.description
+    db_todo.completed = todo.completed
+
+    db.commit()
+    db.refresh(db_todo)
+
+    return {
+        "message": "Todo Updated Successfully",
+        "data": db_todo
+    }
 </code></pre>
 
 <h4>Request</h4>
@@ -194,15 +226,26 @@ def update_todo(todo_id: int, todo: Todo):
 </p>
 
 <pre><code><span class="code-heading">main.py</span>
-@app.delete("/todos/{todo_id}")
-def delete_todo(todo_id: int):
+# Delete todo from database
+@app.delete("/todos/db/{id}")
+def delete_todo_db(
+    id: int,
+    db: Session = Depends(get_db)
+):
 
-    for todo in todos:
+    db_todo = db.query(schemas.Todo).filter(
+        schemas.Todo.id == id
+    ).first()
 
-        if todo["id"] == todo_id:
-            todos.remove(todo)
+    if db_todo is None:
+        return {"message": "Todo not found"}
 
-            return {"message": "Todo deleted"}
+    db.delete(db_todo)
+    db.commit()
+
+    return {
+        "message": "Todo Deleted Successfully"
+    }
 </code></pre>
 
 <h4>Request</h4>
