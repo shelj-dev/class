@@ -121,7 +121,6 @@ def update_product_db(id: int, product: Product, db: Session = Depends(get_db)):
 @app.delete("/products/db/{id}")
 def delete_product_db(id: int, db: Session = Depends(get_db)):
     db_product = db.query(schemas.Product).filter(schemas.Product.id == id).first()
-
     if db_product is None:
         return {"message": "Product not found"}
 
