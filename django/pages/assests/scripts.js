@@ -137,9 +137,7 @@ const footerData = `<footer style="background:#222; color:#fff; padding:15px; te
     <p>&copy; 2026 Foxtech Private Solutions</p>
     <p>
 		<h3 style="display: inline-block">Contributors: </h3>
-        <a href="#" style="color:#ccc; text-decoration:none;">Foxtech.dev.labs</a> |
-        <a href="https://github.com/Ha-ily123" style="color:#ccc; text-decoration:none;">Haily</a> |
-        <a href="https://github.com/Jijitha-2006" style="color:#ccc; text-decoration:none;">Jiitha</a>
+        <a href="#" style="color:#ccc; text-decoration:none;">Foxtech.dev.labs</a>
     </p>
 </footer>
 `;

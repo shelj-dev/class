@@ -124,7 +124,7 @@ const headerData = `<div class="brand">
 
 				<nav aria-label="Main navigation">
 					<ul>
-						<li><a href="/django-learning/index.html">Home</a></li>
+						<li><a href="/fastapi/index.html">Home</a></li>
 					</ul>
 				</nav>`;
 const header = document.getElementById("header");
