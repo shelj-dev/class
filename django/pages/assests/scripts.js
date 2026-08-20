@@ -1,14 +1,37 @@
-const UNLOCK_PASSWORD = "shelji";
-const UNLOCK_KEYS = {
-	ctrl: true,
-	alt: false,
-	key: "p",
-	l_key: "l",
-};
-// let isLocked = true;
-let isLocked = false;
+// ================================================================
+// Copy / Right-click / DevTools lock
+// ================================================================
+// Unlock/lock aren't triggered by a modifier shortcut (browsers can
+// intercept those) but by typing a plain key sequence anywhere on
+// the page: "qqw" unlocks, "ll" re-locks.
+const UNLOCK_PATTERN = "qqw";
+const LOCK_PATTERN = "ll";
+const PATTERN_MAX_LEN = Math.max(UNLOCK_PATTERN.length, LOCK_PATTERN.length);
+
+let isLocked = true;
+let keyBuffer = "";
+
+function isEditableTarget(el) {
+	return !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
+}
+
+function isDevToolsShortcut(e) {
+	return (
+		e.key === "F12" ||
+		(e.ctrlKey && e.shiftKey && ["i", "c", "j"].includes(e.key.toLowerCase())) ||
+		(e.ctrlKey && e.key.toLowerCase() === "u")
+	);
+}
 
 document.addEventListener("copy", (e) => {
+	if (isLocked) e.preventDefault();
+});
+
+document.addEventListener("cut", (e) => {
+	if (isLocked) e.preventDefault();
+});
+
+document.addEventListener("paste", (e) => {
 	if (isLocked) e.preventDefault();
 });
 
@@ -16,56 +39,35 @@ document.addEventListener("contextmenu", (e) => {
 	if (isLocked) e.preventDefault();
 });
 
+document.addEventListener("dragstart", (e) => {
+	if (isLocked) e.preventDefault();
+});
+
 document.addEventListener("keydown", (e) => {
-	// Block Ctrl+C
-	if (isLocked) {
-		if (e.ctrlKey && e.key.toLowerCase() === "c") e.preventDefault();
-		if (
-			e.key === "F12" ||
-			(e.ctrlKey && e.shiftKey && ["i", "c", "j"].includes(e.key.toLowerCase())) ||
-			(e.ctrlKey && e.key.toLowerCase() === "u")
-		) {
-			e.preventDefault();
-			alert("NO NO GO AND TYPE YOUR CODE😒😒🤐🤡");
-		}
-	}
-	// Block DevTools shortcuts
-	if (
-		isLocked &&
-		(e.key === "F12" ||
-			(e.ctrlKey && e.shiftKey && ["i", "c", "j"].includes(e.key.toLowerCase())) ||
-			(e.ctrlKey && e.key.toLowerCase() === "u"))
-	) {
-		e.preventDefault();
-		alert("NO NO GO AND TYPE YOUR CODE😒😒🤐🤡");
-	}
+	// ===================== UNLOCK / LOCK KEY PATTERN =====================
+	if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key.length === 1 && !isEditableTarget(e.target)) {
+		keyBuffer = (keyBuffer + e.key.toLowerCase()).slice(-PATTERN_MAX_LEN);
 
-	// ===================== UNLOCK SHORTCUT =====================
-	if (
-		e.ctrlKey === UNLOCK_KEYS.ctrl &&
-		e.altKey === UNLOCK_KEYS.alt &&
-		e.key.toLowerCase() === UNLOCK_KEYS.key
-	) {
-		e.preventDefault();
-		// const pass = prompt("Enter unlock password:");
-		const pass = "shelj";
-
-		if (pass === UNLOCK_PASSWORD) { 
+		if (keyBuffer.endsWith(UNLOCK_PATTERN)) {
 			isLocked = false;
 			document.documentElement.classList.add("unlock");
-			// alert("😎");
-		} else {
-			alert("😅");
+			keyBuffer = "";
+		} else if (keyBuffer.endsWith(LOCK_PATTERN)) {
+			isLocked = true;
+			document.documentElement.classList.remove("unlock");
+			keyBuffer = "";
 		}
 	}
-	if (
-		e.ctrlKey === UNLOCK_KEYS.ctrl &&
-		e.altKey === UNLOCK_KEYS.alt &&
-		e.key.toLowerCase() === UNLOCK_KEYS.l_key
-	) {
-		isLocked = true;
-		document.documentElement.classList.remove("unlock");
-		// alert("😁");
+
+	if (!isLocked) return;
+
+	// Block Ctrl+C and DevTools shortcuts
+	if (e.ctrlKey && e.key.toLowerCase() === "c") {
+		e.preventDefault();
+	}
+	if (isDevToolsShortcut(e)) {
+		e.preventDefault();
+		alert("DevTools access is disabled on this page.");
 	}
 });
 
