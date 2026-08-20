@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Foxtech | FASTAPI Todo App</title>
+		<link rel="stylesheet" href="assests/style.css" />
+	</head>
+
+	<body>
+		<div class="wrap">
+			<header id="header"></header>
+
+			<main>
+				<section>
+					<article class="card">
+						<h2 id="django-todo">FASTAPI Todo Application</h2>
+						<p class="meta">
+							GET, PUT, POST, DELETE todo items
+						</p>
+
+						<p>
+							This project demonstrates a <strong>basic Todo application</strong>
+							using FASTAPI. Each user can Get,Post,update and delete the todo items.
+						</p>
+
+						<!-- ================= PROJECT SETUP ================= -->
+
+						<h3>Project &amp; App Setup</h3>
+
+<p>
+    Create a FastAPI To-Do project and set up the required environment.
+</p>
+
+<p>
+    <strong>Create FastAPI To-Do Project</strong>
+</p>
+
+<pre><code><span class="code-heading">Terminal</span>
+python -m venv venv
+venv\Scripts\activate
+pip install fastapi uvicorn
+</code></pre>
+
+<p>
+    <strong>Create <code>main.py</code></strong>
+</p>
+
+<p>
+    Create a file named <code>main.py</code> in the project folder.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+from fastapi import FastAPI
+
+app = FastAPI()
+@app.get("/")
+def root():
+    return {"message":"ok"}
+</code></pre>
+
+<p>
+    Start the FastAPI application using the following command:
+</p>
+
+<pre><code><span class="code-heading">Terminal</span>
+uvicorn main:app --reload
+</code></pre>
+
+<p>
+    <strong>Open Swagger</strong>
+</p>
+
+<p>
+    After starting the FastAPI server, open the Swagger documentation:
+</p>
+
+<pre><code>
+http://127.0.0.1:8000/docs
+</code></pre>
+
+<h3>Create Database</h3>
+<p>
+    SQLite is used as the database for the FastAPI Todo application.
+    SQLAlchemy is used to create the database connection and manage
+    communication between FastAPI and the SQLite database.
+</p>
+<h3>Project Structure</h3>
+
+<p>
+    Basic project structure for the FastAPI Todo application:
+</p>
+
+<pre><code>
+Todo_project/
+│
+├── .venv/
+├── main.py
+├── database.py
+├── models.py
+├── schemas.py
+└── todo.db
+</code></pre>
+
+<h4>Configure Database Connection</h4>
+
+<pre><code><span class="code-heading">database.py</span>
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
+
+DATABASE_URL = "sqlite:///./todo.db"
+
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False}
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
+
+Base = declarative_base()
+</code></pre>
+
+
+
+						<!-- ================= MODEL ================= -->
+
+						<h3>Todo Model</h3>
+						<p>
+							The To-Do model defines the structure of tasks created and managed through the FastAPI API.
+						</p>
+
+						<pre><code><span class="code-heading">Todo_app/models.py</span>
+from pydantic import BaseModel
+
+class Todo(BaseModel):
+    id:int
+    title:str
+    completed:bool
+    
+
+    class Config:
+        from_attributes = True
+
+</code></pre>
+<h3>Create Todo Table</h3>
+
+<p>
+    The Todo table is created using SQLAlchemy. It stores the
+    Todo ID, title, description, and completion status.
+</p>
+
+<pre><code><span class="code-heading">schemas.py</span>
+
+from sqlalchemy import Column, Integer, String, Boolean
+from database import Base
+
+class Todo(Base):
+    __tablename__ = "Todo"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String)
+    completed = Column(Boolean,default=False)
+
+</code></pre>
+
+						
+
+						
+
+
+<h4>Create Database Tables</h4>
+
+<p>
+    The <strong>Base.metadata.create_all()</strong> function creates
+    the database tables defined in the SQLAlchemy models.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+from fastapi import FastAPI
+from sqlalchemy.orm import Session
+
+import schemas
+from models import Todo
+from database import engine, SessionLocal
+
+app=FastAPI()
+
+schemas.Base.metadata.create_all(bind=engine)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+......
+</code></pre>
+                            <div>
+								<img class="gallery-img img" src="img/01.png" alt="" />
+                                
+
+							</div>
+
+						<h3>Steps For Creating FASTAPI TODO List</h3>
+
+<p>
+    A simple Todo API is created using FastAPI. Users can create, view,
+    update, and delete Todo items using REST API methods.
+</p>
+<!-- ================= POST ================= -->
+
+<h3>POST - Create Todo Item</h3>
+
+<p>
+    The POST method is used to create a new Todo item.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+from fastapi import Depends
+.....
+
+# Add todo to database
+@app.post("/todos/db")
+def add_todo_db(todo: Todo, db: Session = Depends(get_db)):
+
+    new_todo = schemas.Todo(
+        id=todo.id,
+        title=todo.title,
+        completed=todo.completed
+    )
+
+    db.add(new_todo)
+    db.commit()
+    db.refresh(new_todo)
+
+    return {
+        "message": "Todo Added Successfully",
+        "data": new_todo
+    }
+</code></pre>
+
+<h4>Request Body</h4>
+
+<pre><code>{
+    "title": "Learn FastAPI",
+    "completed": false
+}
+</code></pre>
+
+<p>
+    The new Todo item is added to the Todo list.
+</p>
+                            <div>
+								<img class="gallery-img img" src="img/02.png" alt="" />
+                                <img class="gallery-img img" src="img/03.png" alt="" />
+                                
+
+							</div>
+
+<!-- ================= GET ================= -->
+
+<h3>GET - View Todo Items</h3>
+
+<p>
+    The GET method is used to retrieve Todo items from the API.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+# Get todo from database
+@app.get("/todos/db/{id}")
+def get_todo_db(id: int, db: Session = Depends(get_db)):
+
+    todo = db.query(schemas.Todo).filter(
+        schemas.Todo.id == id
+    ).first()
+
+    if todo is None:
+        return {"message": "Todo not found"}
+
+    return todo
+</code></pre>
+
+</code></pre>
+                            <div>
+								<img class="gallery-img img" src="img/04.png" alt="" />
+                                <img class="gallery-img img" src="img/05.png" alt="" />
+                                
+
+							</div>
+
+
+<!-- ================= PUT ================= -->
+
+<h3>PUT - Update Todo Item</h3>
+
+<p>
+    The PUT method is used to update an existing Todo item.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+# Update todo in database
+@app.put("/todos/db/{id}")
+def update_todo_db(
+    id: int,
+    todo: Todo,
+    db: Session = Depends(get_db)
+):
+
+    db_todo = db.query(schemas.Todo).filter(
+        schemas.Todo.id == id
+    ).first()
+
+    if db_todo is None:
+        return {"message": "Todo not found"}
+
+    db_todo.title = todo.title
+    db_todo.completed = todo.completed
+
+    db.commit()
+    db.refresh(db_todo)
+
+    return {
+        "message": "Todo Updated Successfully",
+        "data": db_todo
+    }
+</code></pre>
+                            <div>
+								<img class="gallery-img img" src="img/06.png" alt="" />
+                                <img class="gallery-img img" src="img/07.png" alt="" />
+                                
+
+							</div>
+<!-- ================= DELETE ================= -->
+
+<h3>DELETE - Delete Todo Item</h3>
+
+<p>
+    The DELETE method is used to remove a Todo item.
+</p>
+
+<pre><code><span class="code-heading">main.py</span>
+# Delete todo from database
+@app.delete("/todos/db/{id}")
+def delete_todo_db(
+    id: int,
+    db: Session = Depends(get_db)
+):
+
+    db_todo = db.query(schemas.Todo).filter(
+        schemas.Todo.id == id
+    ).first()
+
+    if db_todo is None:
+        return {"message": "Todo not found"}
+
+    db.delete(db_todo)
+    db.commit()
+
+    return {
+        "message": "Todo Deleted Successfully"
+    }
+</code></pre>
+                            <div>
+								<img class="gallery-img img" src="img/08.png" alt="" />
+                                <img class="gallery-img img" src="img/09.png" alt="" />
+                                
+
+							</div>
+                    </article>
+                </section>
+            </main>
+        </div>
+        <script src="assests/scripts.js"></script>
+    </body>
+</html>
