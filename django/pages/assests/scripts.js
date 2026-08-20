@@ -115,7 +115,7 @@ document.addEventListener("keyup", (e) => {
 // --------------------------------------------------------------
 // Navbar
 const headerData = `<div class="brand">
-					<div class="logo"><img src="assests/logo.ico" alt="Logo" /></div>
+					<div class="logo"><img src="pages/assests/logo.ico" alt="Logo" /></div>
 					<div>
 						<h1>Foxtech</h1>
 						<div class="sub"></div>
