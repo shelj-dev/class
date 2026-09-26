@@ -16,15 +16,15 @@ Run `http://127.0.0.1:8000/docs` to access the Swagger documentation for the API
 
 ### Available API endpoints
 
-![Swagger docs](image0.png)
+![Swagger docs](img/image0.png)
 
 ## Personal Diary APP
 
 This is a personal diary app that allows users to create, read, update, and delete diary entries. The app uses FastAPI for the backend and provides a simple interface for users to manage their diary entries.
 
-![Personal Diary App](image1.png)
-![User DB](image2.png)
-![Datas DB](image3.png)
+![Personal Diary App](img/image1.png)
+![User DB](img/image2.png)
+![Datas DB](img/image3.png)
 
 ### Diary App
 
