@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Diary</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+     LOGIN / REGISTER
+===================================================== -->
+
+    <div id="authPage" class="auth-page">
+
+        <div class="auth-card">
+
+            <div class="logo">📖 My Diary</div>
+
+            <div class="subtitle">
+                Your personal space for thoughts and memories.
+            </div>
+
+            <div id="authError" class="error"></div>
+            <div id="authSuccess" class="success"></div>
+
+            <!-- LOGIN -->
+
+            <div id="loginForm">
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input id="loginUsername" type="text" placeholder="Enter username">
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input id="loginPassword" type="password" placeholder="Enter password">
+                </div>
+
+                <button class="primary-btn" onclick="login()">
+                    Login
+                </button>
+
+                <div class="switch-auth">
+                    Don't have an account?
+
+                    <button onclick="showRegister()">
+                        Create account
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- REGISTER -->
+
+            <div id="registerForm" style="display:none;">
+
+                <div class="form-group">
+                    <label>Username</label>
+
+                    <input id="registerUsername" type="text" placeholder="Choose username">
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+
+                    <input id="registerEmail" type="email" placeholder="Enter email">
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+
+                    <input id="registerPassword" type="password" placeholder="Choose password">
+                </div>
+
+                <button class="primary-btn" onclick="register()">
+                    Create Account
+                </button>
+
+                <div class="switch-auth">
+                    Already have an account?
+
+                    <button onclick="showLogin()">
+                        Login
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+     DIARY APP
+===================================================== -->
+
+    <div id="appPage">
+
+        <nav class="navbar">
+
+            <div class="nav-title">
+                📖 My Diary
+            </div>
+
+            <div class="user-area">
+
+                <span id="currentUsername" class="username"></span>
+
+                <button class="logout" onclick="logout()">
+                    Logout
+                </button>
+
+            </div>
+
+        </nav>
+
+
+        <main class="container">
+
+            <div class="dashboard">
+
+
+                <!-- =========================
+                 ENTRIES
+            ========================= -->
+
+                <section class="panel">
+
+                    <div class="panel-title">
+                        My Entries
+                    </div>
+
+                    <input id="searchInput" class="search-box" type="text" placeholder="Search diary..."
+                        oninput="searchEntries()">
+
+                    <div id="entriesList" class="entries"></div>
+
+                </section>
+
+
+                <!-- =========================
+                 EDITOR
+            ========================= -->
+
+                <section class="panel">
+
+                    <div class="editor-header">
+
+                        <div class="panel-title">
+                            Write Diary
+                        </div>
+
+                        <div class="editor-actions">
+
+                            <button id="deleteButton" class="delete-btn" onclick="deleteEntry()" style="display:none;">
+                                Delete
+                            </button>
+
+                            <button class="save-btn" onclick="saveEntry()">
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="meta-row">
+
+                        <div>
+                            <label>Title</label>
+
+                            <input id="entryTitle" type="text" placeholder="What happened today?">
+                        </div>
+
+
+                        <div>
+                            <label>Date</label>
+
+                            <input id="entryDate" type="date">
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Mood</label>
+
+                        <select id="entryMood">
+
+                            <option value="😊">😊 Happy</option>
+                            <option value="😌">😌 Calm</option>
+                            <option value="😍">😍 Excited</option>
+                            <option value="😐">😐 Normal</option>
+                            <option value="😔">😔 Sad</option>
+                            <option value="😡">😡 Angry</option>
+                            <option value="😴">😴 Tired</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Diary</label>
+
+                        <textarea id="entryContent" placeholder="Write whatever is on your mind..."></textarea>
+
+                    </div>
+
+
+                    <div id="saveStatus" class="status"></div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <script src="scripts.js"></script>
+
+</body>
+
+</html>
