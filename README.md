@@ -10,4 +10,6 @@
 
 ## FastAPI Template
 
-[https://github.com/shelj-dev/class/fastapi-template](https://github.com/shelj-dev/class/fastapi-template)
+This is a FastAPI template for Login, Logout, and sample data save and control. This also a personal diary app that allows users to create, read, update, and delete diary entries. The app uses FastAPI for the backend and provides a simple interface for users to manage their diary entries.
+
+[https://github.com/shelj-dev/class/tree/main/fastapi%20template](https://github.com/shelj-dev/class/tree/main/fastapi%20template)
