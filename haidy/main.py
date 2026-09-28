@@ -5,8 +5,8 @@ from fastapi import (
 
 from sqlalchemy.orm import Session
 import schemas 
-from haidy.models import Product
-from haidy.database import (
+from models import Product
+from database import (
     engine,
     SessionLocal
 )

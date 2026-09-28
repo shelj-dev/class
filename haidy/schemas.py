@@ -4,7 +4,7 @@ from sqlalchemy import (
     Integer,
     String
 )
-from haidy.database import Base
+from database import Base
 
 
 class Product(Base):

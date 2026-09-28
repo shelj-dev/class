@@ -40,6 +40,7 @@ pip install sqlalchemy
 						<pre><code>myproject/
 ├── main.py
 ├── database.py
+├── schemas.py
 ├── models.py
 └── products.db
 </code></pre>
@@ -67,46 +68,48 @@ Base = declarative_base()
                         
 						<br />
 						<div class="lesson">
-							
-							
-							<pre><code><div class="code-heading">mysite/models.py</div>
-from pydantic import BaseModel
-
-class Product(BaseModel):
-    id:int
-    name:str
-    description:str
-    
-
-    class Config:
-        from_attributes = True
-
-</code></pre>
 
                             <h2 id="models">3.Create schemas.py</h2>
     						<pre><code><div class="code-heading">mysite/schemas.py</div>
+from pydantic import BaseModel
+
+class ProductCreate(BaseModel):
+    id: int
+    name: str
+    description: str
+    image: str
+
+    class Config:
+        from_attributes = True
+</code></pre>
+
+                        <h2 id="models">4.Create models.py</h2>
+                        <pre><code><div class="code-heading">mysite/models.py</div>
 from sqlalchemy import Column, Integer, String
 from database import Base
 
-class Product(Base):
+class Products(Base):
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     description = Column(String)
+    image = Column(String) 
+
+
 </code></pre>
 							
 							<pre><code><div class="code-heading">mysite/main.py</div>
-from fastapi import FastAPI
-from sqlalchemy.orm import Session
 
-import schemas
-from models import Product
-from database import engine, SessionLocal
+from sqlalchemy.orm import Session
+from schemas import ProductCreate
+from models import Products
+from database import engine, SessionLocal,Base
+
 
 app=FastAPI()
 
-schemas.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 def get_db():
     db = SessionLocal()
@@ -117,23 +120,29 @@ def get_db():
 .......
 .......
 
-</code></pre>				
+</code></pre>				<p>Run:</p>
+							<pre><code><div class="code-heading">Terminal</div>
+uvicorn main:app --reload	
+</code></pre>
+						</div>
                             <div>
 							    <img class="gallery-img img" src="img/21.png" alt="" />
 
 						    </div>
-                            <h2 id="models">4.Add POST Database</h2>
+                            <h2 id="models">5.Add POST Database</h2>
                             
                             <pre><code><div class="code-heading">mysite/main.py</div>
+
 from fastapi import Depends
 .......
 
 @app.post("/products/db")
-def add_product_db(product: Product, db: Session = Depends(get_db)):
-    new_product = schemas.Product(
+def add_product_db(product: ProductCreate, db: Session = Depends(get_db)):
+    new_product = Products(
         id=product.id,
         name=product.name,
-        description=product.description
+        description=product.description,
+        image=product.image
     )
 
     db.add(new_product)
@@ -151,13 +160,13 @@ def add_product_db(product: Product, db: Session = Depends(get_db)):
 							    <img class="gallery-img img" src="img/15.png" alt="" />
 
 						    </div>
-                            <h2 id="models">5.GET Database</h2>
+                            <h2 id="models">6.GET Database</h2>
                             
                             <pre><code><div class="code-heading">mysite/main.py</div>
 
 @app.get("/products/db/{id}")
 def get_product_db(id: int, db: Session = Depends(get_db)):
-    product = db.query(schemas.Product).filter(schemas.Product.id == id).first()
+    product = db.query(Products).filter(Products.id == id).first()
 
     if product is None:
         return {"message": "Product not found"}
@@ -170,13 +179,13 @@ def get_product_db(id: int, db: Session = Depends(get_db)):
 							    <!-- <img class="gallery-img img" src="img/15.png" alt="" /> -->
 
 						    </div>    
-                            <h2 id="models">6.update PUT Database</h2>
+                            <h2 id="models">7.update PUT Database</h2>
                             
                             <pre><code><div class="code-heading">mysite/main.py</div>
 
 @app.put("/products/db/{id}")
-def update_product_db(id: int, product: Product, db: Session = Depends(get_db)):
-    db_product = db.query(schemas.Product).filter(schemas.Product.id == id).first()
+def update_product_db(id: int, product: ProductCreate, db: Session = Depends(get_db)):
+    db_product = db.query(Products).filter(Products.id == id).first()
 
     if db_product is None:
         return {"message": "Product not found"}
@@ -198,14 +207,13 @@ def update_product_db(id: int, product: Product, db: Session = Depends(get_db)):
 							    <img class="gallery-img img" src="img/18.png" alt="" />
 
 						    </div>
-                            <h2 id="models">6.Delete Database</h2>
+                            <h2 id="models">8.Delete Database</h2>
                             
                             <pre><code><div class="code-heading">mysite/main.py</div>
 
 @app.delete("/products/db/{id}")
 def delete_product_db(id: int, db: Session = Depends(get_db)):
-    db_product = db.query(schemas.Product).filter(schemas.Product.id == id).first()
-
+    db_product = db.query(Products).filter(Products.id == id).first()
     if db_product is None:
         return {"message": "Product not found"}
 
@@ -213,6 +221,7 @@ def delete_product_db(id: int, db: Session = Depends(get_db)):
     db.commit()
 
     return {"message": "Product Deleted Successfully"}
+
 </code></pre>
                             <div>
 							    <img class="gallery-img img" src="img/19.png" alt="" />
