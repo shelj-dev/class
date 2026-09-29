@@ -1,51 +1,52 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Foxtech | Database</title>
-		<link rel="stylesheet" href="assests/style.css" />
-	</head>
 
-	<body>
-		<div class="wrap">
-			<header id="header"></header>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Foxtech | Database</title>
+    <link rel="stylesheet" href="assests/style.css" />
+</head>
 
-			<main>
-				<section>
-					<article class="card">
-						<div class="lesson">
-							<h1><u>SQLite</u></h1>
-                            <div class="meta">
-								SQLite is one of the most commonly used databases with FastAPI, 
-                                especially for learning, prototyping, and small projects. 
-                                It integrates easily with SQLAlchemy.
-							</div>
-							
+<body>
+    <div class="wrap">
+        <header id="header"></header>
 
-							 
-                            <br>
-                            <h2 id="models">1.Install Required Packages</h2>
-                            <div class="meta">
-                                BaseModel is the base class provided by Pydantic. 
-                                It is used to define the structure of request and response data.
-                            </div>
-							<pre><code><div class="code-heading">Terminal</div>
+        <main>
+            <section>
+                <article class="card">
+                    <div class="lesson">
+                        <h1><u>SQLite</u></h1>
+                        <div class="meta">
+                            SQLite is one of the most commonly used databases with FastAPI,
+                            especially for learning, prototyping, and small projects.
+                            It integrates easily with SQLAlchemy.
+                        </div>
+
+
+
+                        <br>
+                        <h2 id="models">1.Install Required Packages</h2>
+                        <div class="meta">
+                            BaseModel is the base class provided by Pydantic.
+                            It is used to define the structure of request and response data.
+                        </div>
+                        <pre><code><div class="code-heading">Terminal</div>
 pip install sqlalchemy
 </code></pre>
 
 
-                            <h2 id="models">2.Create database</h2>
-                            <p id="project-layout">Project layout:</p>
-						<pre><code>myproject/
+                        <h2 id="models">2.Create database</h2>
+                        <p id="project-layout">Project layout:</p>
+                        <pre><code>myproject/
 ├── main.py
 ├── database.py
 ├── schemas.py
 ├── models.py
 └── products.db
 </code></pre>
-                            
-                            <pre><code><div class="code-heading">mysite/database.py</div>
+
+                        <pre><code><div class="code-heading">mysite/database.py</div>
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -65,12 +66,12 @@ SessionLocal = sessionmaker(
 
 Base = declarative_base()
 </code></pre>
-                        
-						<br />
-						<div class="lesson">
+
+                        <br />
+                        <div class="lesson">
 
                             <h2 id="models">3.Create schemas.py</h2>
-    						<pre><code><div class="code-heading">mysite/schemas.py</div>
+                            <pre><code><div class="code-heading">mysite/schemas.py</div>
 from pydantic import BaseModel
 
 class ProductCreate(BaseModel):
@@ -82,8 +83,8 @@ class ProductCreate(BaseModel):
         from_attributes = True
 </code></pre>
 
-                        <h2 id="models">4.Create models.py</h2>
-                        <pre><code><div class="code-heading">mysite/models.py</div>
+                            <h2 id="models">4.Create models.py</h2>
+                            <pre><code><div class="code-heading">mysite/models.py</div>
 from sqlalchemy import Column, Integer, String
 from database import Base
 
@@ -97,8 +98,8 @@ class Products(Base):
 
 
 </code></pre>
-							
-							<pre><code><div class="code-heading">mysite/main.py</div>
+
+                            <pre><code><div class="code-heading">mysite/main.py</div>
 
 from sqlalchemy.orm import Session
 from schemas import ProductCreate
@@ -119,18 +120,19 @@ def get_db():
 .......
 .......
 
-</code></pre>				<p>Run:</p>
-							<pre><code><div class="code-heading">Terminal</div>
+</code></pre>
+                            <p>Run:</p>
+                            <pre><code><div class="code-heading">Terminal</div>
 uvicorn main:app --reload	
 </code></pre>
-						</div>
-                            <div>
-							    <img class="gallery-img img" src="img/21.png" alt="" />
+                        </div>
+                        <div>
+                            <img class="gallery-img img" src="img/21.png" alt="" />
 
-						    </div>
-                            <h2 id="models">5.Add POST Database</h2>
-                            
-                            <pre><code><div class="code-heading">mysite/main.py</div>
+                        </div>
+                        <h2 id="models">5.Add POST Database</h2>
+
+                        <pre><code><div class="code-heading">mysite/main.py</div>
 
 from fastapi import Depends
 .......
@@ -153,14 +155,14 @@ def add_product_db(product: ProductCreate, db: Session = Depends(get_db)):
     }
 
 </code></pre>
-                            <div>
-							    <img class="gallery-img img" src="img/14.png" alt="" />
-							    <img class="gallery-img img" src="img/15.png" alt="" />
+                        <div>
+                            <img class="gallery-img img" src="img/14.png" alt="" />
+                            <img class="gallery-img img" src="img/15.png" alt="" />
 
-						    </div>
-                            <h2 id="models">6.GET Database</h2>
-                            
-                            <pre><code><div class="code-heading">mysite/main.py</div>
+                        </div>
+                        <h2 id="models">6.GET Database</h2>
+
+                        <pre><code><div class="code-heading">mysite/main.py</div>
 
 @app.get("/products/db/{id}")
 def get_product_db(id: int, db: Session = Depends(get_db)):
@@ -172,14 +174,14 @@ def get_product_db(id: int, db: Session = Depends(get_db)):
     return product
 
 </code></pre>
-                            <div>
-							    <img class="gallery-img img" src="img/16.png" alt="" />
-							    <!-- <img class="gallery-img img" src="img/15.png" alt="" /> -->
+                        <div>
+                            <img class="gallery-img img" src="img/16.png" alt="" />
+                            <!-- <img class="gallery-img img" src="img/15.png" alt="" /> -->
 
-						    </div>    
-                            <h2 id="models">7.update PUT Database</h2>
-                            
-                            <pre><code><div class="code-heading">mysite/main.py</div>
+                        </div>
+                        <h2 id="models">7.update PUT Database</h2>
+
+                        <pre><code><div class="code-heading">mysite/main.py</div>
 
 @app.put("/products/db/{id}")
 def update_product_db(id: int, product: ProductCreate, db: Session = Depends(get_db)):
@@ -200,14 +202,14 @@ def update_product_db(id: int, product: ProductCreate, db: Session = Depends(get
     }
 
 </code></pre>
-                            <div>
-							    <img class="gallery-img img" src="img/17.png" alt="" />
-							    <img class="gallery-img img" src="img/18.png" alt="" />
+                        <div>
+                            <img class="gallery-img img" src="img/17.png" alt="" />
+                            <img class="gallery-img img" src="img/18.png" alt="" />
 
-						    </div>
-                            <h2 id="models">8.Delete Database</h2>
-                            
-                            <pre><code><div class="code-heading">mysite/main.py</div>
+                        </div>
+                        <h2 id="models">8.Delete Database</h2>
+
+                        <pre><code><div class="code-heading">mysite/main.py</div>
 
 @app.delete("/products/db/{id}")
 def delete_product_db(id: int, db: Session = Depends(get_db)):
@@ -221,28 +223,259 @@ def delete_product_db(id: int, db: Session = Depends(get_db)):
     return {"message": "Product Deleted Successfully"}
 
 </code></pre>
-                            <div>
-							    <img class="gallery-img img" src="img/19.png" alt="" />
-							    <img class="gallery-img img" src="img/20.png" alt="" />
+                        <div>
+                            <img class="gallery-img img" src="img/19.png" alt="" />
+                            <img class="gallery-img img" src="img/20.png" alt="" />
 
-						    </div>                       
-								<hr />
-							</div>
-						</div>
-					</article>
-				</section>
+                        </div>
 
-				
-			</main>
+                        <hr>
+                        <h2 id="models">9. Image/File Upload and Static File Serving</h2>
 
-			<div id="lightbox">
-				<span id="close">&times;</span>
-				<img id="lightbox-img" />
-				<div id="prev" class="nav">&#10094;</div>
-				<div id="next" class="nav">&#10095;</div>
-			</div>
-		</div>
-        <div id="footer"></div>
-		<script src="assests/scripts.js"></script>
-	</body>
+                        <div class="meta">
+                            FastAPI provides <code>UploadFile</code> for receiving files such as images.
+                            The uploaded image can be saved inside an <code>uploads</code> folder and then
+                            served using <code>StaticFiles</code>.
+                        </div>
+
+                        <h3>Step 1: Create Upload Folder</h3>
+
+                        <pre><code><div class="code-heading">mysite/main.py</div>
+import os
+import shutil
+
+UPLOAD_DIR = "uploads"
+
+if not os.path.exists(UPLOAD_DIR):
+    os.makedirs(UPLOAD_DIR)
+</code></pre>
+
+                        <div class="meta">
+                            The <code>uploads</code> folder will contain all uploaded images/files.
+                        </div>
+
+                        <h3>Step 2: Configure Static File Serving</h3>
+
+                        <pre><code><div class="code-heading">mysite/main.py</div>
+from fastapi.staticfiles import StaticFiles
+
+app.mount(
+    "/files",
+    StaticFiles(directory=UPLOAD_DIR),
+    name="files"
+)
+</code></pre>
+
+                        <div class="meta">
+                            Files inside the <code>uploads</code> folder can now be accessed using:
+                            <br><br>
+                            <code>http://127.0.0.1:8000/files/filename.jpg</code>
+                        </div>
+
+                        <h3>Step 3: Create Image Upload API</h3>
+
+                        <pre><code><div class="code-heading">mysite/main.py</div>
+from fastapi import UploadFile, File, HTTPException
+
+@app.post("/upload")
+def upload_file(file: UploadFile = File(...)):
+
+    filename = file.filename
+
+    if not filename:
+        raise HTTPException(
+            status_code=400,
+            detail="File not selected"
+        )
+
+    file_path = os.path.join(
+        UPLOAD_DIR,
+        filename
+    )
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(
+            file.file,
+            buffer
+        )
+
+    return {
+        "message": "File Uploaded Successfully",
+        "fileName": filename,
+        "file_url": f"http://127.0.0.1:8000/files/{filename}"
+    }
+</code></pre>
+
+                        <h3>Step 4: Upload Image Using Swagger UI</h3>
+
+                        <div class="meta">
+                            Run the FastAPI application and open the Swagger documentation.
+                        </div>
+
+                        <pre><code><div class="code-heading">Terminal</div>
+uvicorn main:app --reload
+</code></pre>
+
+                        <div class="meta">
+                            Open:
+                            <br><br>
+                            <code>http://127.0.0.1:8000/docs</code>
+                            <br><br>
+                            Find the <code>POST /upload</code> endpoint, select an image,
+                            and click <strong>Execute</strong>.
+                        </div>
+
+                        <h3>Step 5: Image URL</h3>
+
+                        <pre><code><div class="code-heading">Response</div>
+{
+    "message": "File Uploaded Successfully",
+    "fileName": "product.jpg",
+    "file_url": "http://127.0.0.1:8000/files/product.jpg"
+}
+</code></pre>
+
+                        <div class="meta">
+                            The returned <code>file_url</code> can be stored in the database
+                            and later used to display the product image.
+                        </div>
+
+                        <h3>Step 6: Store Image URL in Product Database</h3>
+
+                        <pre><code><div class="code-heading">mysite/schemas.py</div>
+from pydantic import BaseModel
+
+class ProductCreate(BaseModel):
+
+    name: str
+    description: str
+    image: str
+
+    class Config:
+        from_attributes = True
+</code></pre>
+
+                        <pre><code><div class="code-heading">mysite/models.py</div>
+from sqlalchemy import Column, Integer, String
+from database import Base
+
+class Products(Base):
+
+    __tablename__ = "products"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    description = Column(String)
+    image = Column(String)
+</code></pre>
+
+                        <h3>Step 7: Add Product With Image URL</h3>
+
+                        <pre><code><div class="code-heading">mysite/main.py</div>
+@app.post("/products/db")
+def add_product_db(
+    product: ProductCreate,
+    db: Session = Depends(get_db)
+):
+
+    new_product = Products(
+        name=product.name,
+        description=product.description,
+        image=product.image
+    )
+
+    db.add(new_product)
+    db.commit()
+    db.refresh(new_product)
+
+    return {
+        "message": "Product Added Successfully",
+        "data": new_product
+    }
+</code></pre>
+
+                        <h3>Step 8: Display Image in HTML</h3>
+
+                        <pre><code><div class="code-heading">HTML</div>
+<img
+    src="http://127.0.0.1:8000/files/product.jpg"
+    alt="Product Image"
+    width="300"
+/>
+</code></pre>
+
+                        <div class="meta">
+                            The database stores the image URL or filename, while the actual image
+                            remains inside the <code>uploads</code> folder.
+                        </div>
+
+                        <h3>Step 9: Complete File Upload Flow</h3>
+
+                        <pre><code><div class="code-heading">Flow</div>
+User
+  ↓
+POST /upload
+  ↓
+FastAPI UploadFile
+  ↓
+uploads/product.jpg
+  ↓
+StaticFiles
+  ↓
+/files/product.jpg
+  ↓
+Image URL
+  ↓
+Product.image
+  ↓
+SQLite Database
+</code></pre>
+
+                        <h3>Important Note</h3>
+
+                        <div class="meta">
+                            <strong>Do not create another route such as
+                                <code>@app.get("/files/{filename}")</code>.</strong>
+                            The following mount already handles file access:
+                        </div>
+
+                        <pre><code><div class="code-heading">mysite/main.py</div>
+app.mount(
+    "/files",
+    StaticFiles(directory=UPLOAD_DIR),
+    name="files"
+)
+</code></pre>
+
+                        <div class="meta">
+                            Therefore:
+                            <br><br>
+                            <code>uploads/product.jpg</code>
+                            <br>
+                            becomes
+                            <br>
+                            <code>http://127.0.0.1:8000/files/product.jpg</code>
+                        </div>
+                    </div>
+
+                    <hr />
+    </div>
+    </div>
+    </article>
+    </section>
+
+
+    </main>
+
+    <div id="lightbox">
+        <span id="close">&times;</span>
+        <img id="lightbox-img" />
+        <div id="prev" class="nav">&#10094;</div>
+        <div id="next" class="nav">&#10095;</div>
+    </div>
+    </div>
+    <div id="footer"></div>
+    <script src="assests/scripts.js"></script>
+</body>
+
 </html>
