@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Foxtech | Introduction</title>
+    <link rel="stylesheet" href="assests/style.css" />
+</head>
+
+<body>
+    <div class="wrap">
+        <header id="header"></header>
+
+        <main>
+            <section>
+                <article class="card">
+                    <h2 id="models">Image/File Upload and Static File Serving</h2>
+
+                    <div class="meta">
+                        FastAPI provides <code>UploadFile</code> for receiving files such as images.
+                        The uploaded image can be saved inside an <code>uploads</code> folder and then
+                        served using <code>StaticFiles</code>.
+                    </div>
+
+                    <h3>Step 1: Create Upload Folder</h3>
+
+                    <pre><code><div class="code-heading">mysite/main.py</div>
+import os
+import shutil
+
+UPLOAD_DIR = "uploads"
+
+if not os.path.exists(UPLOAD_DIR):
+    os.makedirs(UPLOAD_DIR)
+</code></pre>
+
+                    <div class="meta">
+                        The <code>uploads</code> folder will contain all uploaded images/files.
+                    </div>
+
+                    <h3>Step 2: Configure Static File Serving</h3>
+
+                    <pre><code><div class="code-heading">mysite/main.py</div>
+from fastapi.staticfiles import StaticFiles
+
+app.mount(
+    "/files",
+    StaticFiles(directory=UPLOAD_DIR),
+    name="files"
+)
+</code></pre>
+
+                    <div class="meta">
+                        Files inside the <code>uploads</code> folder can now be accessed using:
+                        <br><br>
+                        <code>http://127.0.0.1:8000/files/filename.jpg</code>
+                    </div>
+
+                    <h3>Step 3: Create Image Upload API</h3>
+
+                    <pre><code><div class="code-heading">mysite/main.py</div>
+from fastapi import UploadFile, File, HTTPException
+
+@app.post("/upload")
+def upload_file(file: UploadFile = File(...)):
+
+    filename = file.filename
+
+    if not filename:
+        raise HTTPException(
+            status_code=400,
+            detail="File not selected"
+        )
+
+    file_path = os.path.join(
+        UPLOAD_DIR,
+        filename
+    )
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(
+            file.file,
+            buffer
+        )
+
+    return {
+        "message": "File Uploaded Successfully",
+        "fileName": filename,
+        "file_url": f"http://127.0.0.1:8000/files/{filename}"
+    }
+</code></pre>
+
+                    <h3>Step 4: Upload Image Using Swagger UI</h3>
+
+                    <div class="meta">
+                        Run the FastAPI application and open the Swagger documentation.
+                    </div>
+
+                    <pre><code><div class="code-heading">Terminal</div>
+uvicorn main:app --reload
+</code></pre>
+
+                    <div class="meta">
+                        Open:
+                        <br><br>
+                        <code>http://127.0.0.1:8000/docs</code>
+                        <br><br>
+                        Find the <code>POST /upload</code> endpoint, select an image,
+                        and click <strong>Execute</strong>.
+                    </div>
+
+                    <h3>Step 5: Image URL</h3>
+
+                    <pre><code><div class="code-heading">Response</div>
+{
+    "message": "File Uploaded Successfully",
+    "fileName": "product.jpg",
+    "file_url": "http://127.0.0.1:8000/files/product.jpg"
+}
+</code></pre>
+
+                    <div class="meta">
+                        The returned <code>file_url</code> can be stored in the database
+                        and later used to display the product image.
+                    </div>
+
+                    <h3>Step 6: Store Image URL in Product Database</h3>
+
+                    <pre><code><div class="code-heading">mysite/schemas.py</div>
+from pydantic import BaseModel
+
+class ProductCreate(BaseModel):
+
+    name: str
+    description: str
+    image: str
+
+    class Config:
+        from_attributes = True
+</code></pre>
+
+                    <pre><code><div class="code-heading">mysite/models.py</div>
+from sqlalchemy import Column, Integer, String
+from database import Base
+
+class Products(Base):
+
+    __tablename__ = "products"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    description = Column(String)
+    image = Column(String)
+</code></pre>
+
+                    <h3>Step 7: Add Product With Image URL</h3>
+
+                    <pre><code><div class="code-heading">mysite/main.py</div>
+@app.post("/products/db")
+def add_product_db(
+    product: ProductCreate,
+    db: Session = Depends(get_db)
+):
+
+    new_product = Products(
+        name=product.name,
+        description=product.description,
+        image=product.image
+    )
+
+    db.add(new_product)
+    db.commit()
+    db.refresh(new_product)
+
+    return {
+        "message": "Product Added Successfully",
+        "data": new_product
+    }
+</code></pre>
+
+                    <h3>Step 8: Display Image in HTML</h3>
+
+                    <pre><code><div class="code-heading">HTML</div>
+<img
+    src="http://127.0.0.1:8000/files/product.jpg"
+    alt="Product Image"
+    width="300"
+/>
+</code></pre>
+
+                    <div class="meta">
+                        The database stores the image URL or filename, while the actual image
+                        remains inside the <code>uploads</code> folder.
+                    </div>
+
+                    <h3>Step 9: Complete File Upload Flow</h3>
+
+                    <pre><code><div class="code-heading">Flow</div>
+User
+  ↓
+POST /upload
+  ↓
+FastAPI UploadFile
+  ↓
+uploads/product.jpg
+  ↓
+StaticFiles
+  ↓
+/files/product.jpg
+  ↓
+Image URL
+  ↓
+Product.image
+  ↓
+SQLite Database
+</code></pre>
+
+                    <h3>Important Note</h3>
+
+                    <div class="meta">
+                        <strong>Do not create another route such as
+                            <code>@app.get("/files/{filename}")</code>.</strong>
+                        The following mount already handles file access:
+                    </div>
+
+                    <pre><code><div class="code-heading">mysite/main.py</div>
+app.mount(
+    "/files",
+    StaticFiles(directory=UPLOAD_DIR),
+    name="files"
+)
+</code></pre>
+
+                    <div class="meta">
+                        Therefore:
+                        <br><br>
+                        <code>uploads/product.jpg</code>
+                        <br>
+                        becomes
+                        <br>
+                        <code>http://127.0.0.1:8000/files/product.jpg</code>
+                    </div>
+    </div>
+
+    </article>
+    </section>
+
+
+    </main>
+    <div id="lightbox">
+        <span id="close">&times;</span>
+        <img id="lightbox-img" />
+        <div id="prev" class="nav">&#10094;</div>
+        <div id="next" class="nav">&#10095;</div>
+    </div>
+    </div>
+    <div id="footer"></div>
+
+    <script src="assests/scripts.js"></script>
+</body>
+
+</html>
