@@ -1,5 +1,7 @@
 # FastAPI Template
 
+## Only `main.py` is the total backend
+
 This app is a api template for Login, Logout, and sample datas save and control.
 
 ## Setup
