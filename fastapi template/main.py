@@ -7,6 +7,17 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 DATABASE_URL = "sqlite:///./test.db"
 
 
@@ -26,6 +37,7 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+    role = Column(String, default="user")
 
 
 class Item(Base):
@@ -53,16 +65,18 @@ class UserCreate(BaseModel):
     username: str
     email: str
     hashed_password: str
+    role : str
     
 class UserResponse(BaseModel):
     id: int
+    role : str
     username: str
     email: str
 
 
 @app.post("/users/create/", response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    db_user = User(username=user.username, email=user.email, hashed_password=user.hashed_password)
+    db_user = User(username=user.username, email=user.email, hashed_password=user.hashed_password, role=user.role)
     if (db.query(User).filter(User.username == user.username).first() 
                         or 
         db.query(User).filter(User.email == user.email).first()):

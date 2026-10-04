@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<h1>Hello</h1>
+		<script>
+			async function getUser() {
+				let response = await fetch("http://127.0.0.1:8000/users/");
+				let user = await response.json();
+				console.log(user);
+			}
+			getUser();
+
+
+
+
+
+
+
+			async function postUser() {
+				let response = await fetch("http://127.0.0.1:8000/users/create/", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(
+                        {
+                            username: "Shelj1",
+                            email: "shelj1@example.com",
+                            hashed_password: "qqqqq",
+                        }
+                ),
+				});
+
+				let user = await response.json();
+				console.log(user);
+			}
+
+			postUser();
+		</script>
+	</body>
+</html>
