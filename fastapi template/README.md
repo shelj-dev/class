@@ -18,6 +18,12 @@ Run `http://127.0.0.1:8000/docs` to access the Swagger documentation for the API
 
 ### Available API endpoints
 
+- Authentication: `POST /users/create/`, `POST /users/login/`, `GET /users/`
+- Diary Items CRUD: `POST /items/`, `GET /items/`, `PUT /items/{id}`, `DELETE /items/{id}`
+- File Upload & Static Serving:
+  - `POST /upload` - Upload file directly to `uploads/`
+  - `GET /files/<filename>` - Access uploaded file through StaticFiles mount
+
 ![Swagger docs](img/image0.png)
 
 ## Personal Diary APP

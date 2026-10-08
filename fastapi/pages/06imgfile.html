@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Foxtech | Introduction</title>
+    <title>Foxtech | Image Upload</title>
     <link rel="stylesheet" href="assests/style.css" />
 </head>
 
@@ -23,7 +23,17 @@
                         served using <code>StaticFiles</code>.
                     </div>
 
-                    <h3>Step 1: Create Upload Folder</h3>
+                    <h3>Step 1: Install Required Package</h3>
+
+                    <pre><code><div class="code-heading">Terminal</div>
+pip install python-multipart
+</code></pre>
+
+                    <div class="meta">
+                        FastAPI requires <code>python-multipart</code> to process form and file uploads.
+                    </div>
+
+                    <h3>Step 2: Create Upload Folder</h3>
 
                     <pre><code><div class="code-heading">mysite/main.py</div>
 import os
@@ -39,7 +49,7 @@ if not os.path.exists(UPLOAD_DIR):
                         The <code>uploads</code> folder will contain all uploaded images/files.
                     </div>
 
-                    <h3>Step 2: Configure Static File Serving</h3>
+                    <h3>Step 3: Configure Static File Serving</h3>
 
                     <pre><code><div class="code-heading">mysite/main.py</div>
 from fastapi.staticfiles import StaticFiles
@@ -57,7 +67,7 @@ app.mount(
                         <code>http://127.0.0.1:8000/files/filename.jpg</code>
                     </div>
 
-                    <h3>Step 3: Create Image Upload API</h3>
+                    <h3>Step 4: Create Image Upload API</h3>
 
                     <pre><code><div class="code-heading">mysite/main.py</div>
 from fastapi import UploadFile, File, HTTPException
@@ -91,7 +101,7 @@ def upload_file(file: UploadFile = File(...)):
     }
 </code></pre>
 
-                    <h3>Step 4: Upload Image Using Swagger UI</h3>
+                    <h3>Step 5: Upload Image Using Swagger UI</h3>
 
                     <div class="meta">
                         Run the FastAPI application and open the Swagger documentation.
@@ -110,7 +120,7 @@ uvicorn main:app --reload
                         and click <strong>Execute</strong>.
                     </div>
 
-                    <h3>Step 5: Image URL</h3>
+                    <h3>Step 6: Image URL</h3>
 
                     <pre><code><div class="code-heading">Response</div>
 {
@@ -125,7 +135,7 @@ uvicorn main:app --reload
                         and later used to display the product image.
                     </div>
 
-                    <h3>Step 6: Store Image URL in Product Database</h3>
+                    <h3>Step 7: Store Image URL in Product Database</h3>
 
                     <pre><code><div class="code-heading">mysite/schemas.py</div>
 from pydantic import BaseModel
@@ -154,7 +164,7 @@ class Products(Base):
     image = Column(String)
 </code></pre>
 
-                    <h3>Step 7: Add Product With Image URL</h3>
+                    <h3>Step 8: Add Product With Image URL</h3>
 
                     <pre><code><div class="code-heading">mysite/main.py</div>
 @app.post("/products/db")
@@ -179,7 +189,7 @@ def add_product_db(
     }
 </code></pre>
 
-                    <h3>Step 8: Display Image in HTML</h3>
+                    <h3>Step 9: Display Image in HTML</h3>
 
                     <pre><code><div class="code-heading">HTML</div>
 <img
@@ -194,7 +204,7 @@ def add_product_db(
                         remains inside the <code>uploads</code> folder.
                     </div>
 
-                    <h3>Step 9: Complete File Upload Flow</h3>
+                    <h3>Step 10: Complete File Upload Flow</h3>
 
                     <pre><code><div class="code-heading">Flow</div>
 User
@@ -241,10 +251,9 @@ app.mount(
                         <br>
                         <code>http://127.0.0.1:8000/files/product.jpg</code>
                     </div>
-    </div>
 
-    </article>
-    </section>
+                </article>
+            </section>
 
 
     </main>
