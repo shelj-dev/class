@@ -1,13 +1,15 @@
-from fastapi import Depends, FastAPI, HTTPException
+import os
+import shutil
+
+from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
-from pydantic import BaseModel
-
 
 app = FastAPI()
-
-from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,17 +19,50 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 DATABASE_URL = "sqlite:///./test.db"
 
-
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
+# =====================================================
+# FILE UPLOAD & STATIC FILES
+# =====================================================
+
+UPLOAD_DIR = "uploads"
+
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+app.mount(
+    "/files",
+    StaticFiles(directory=UPLOAD_DIR),
+    name="files"
+)
+
+
+@app.post("/upload")
+def upload_file(file: UploadFile = File(...)):
+    if not file.filename:
+        raise HTTPException(
+            status_code=400,
+            detail="File not selected"
+        )
+
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {
+        "message": "File uploaded successfully",
+        "fileName": file.filename,
+        "file_url": f"http://127.0.0.1:8000/files/{file.filename}"
+    }
+    
+    
+    
 
 
 class User(Base):

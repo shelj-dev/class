@@ -5,15 +5,44 @@ def main():
 if __name__ == "__main__":
     main()
 
-from fastapi import FastAPI, Depends
+import os
+import shutil
+
+from fastapi import FastAPI, Depends, UploadFile, File, HTTPException
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from schemas import ProductCreate
 from models import Products
-from database import engine, SessionLocal,Base
+from database import engine, SessionLocal, Base
+
+app = FastAPI()
+
+# --------------------------------------------------
+# File Upload Setup & Static Files
+# --------------------------------------------------
+UPLOAD_DIR = "uploads"
+if not os.path.exists(UPLOAD_DIR):
+    os.makedirs(UPLOAD_DIR)
+
+app.mount("/files", StaticFiles(directory=UPLOAD_DIR), name="files")
 
 
+@app.post("/upload")
+def upload_file(file: UploadFile = File(...)):
+    filename = file.filename
+    if not filename:
+        raise HTTPException(status_code=400, detail="File not selected")
 
-app=FastAPI()
+    file_path = os.path.join(UPLOAD_DIR, filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {
+        "message": "File Uploaded Successfully",
+        "fileName": filename,
+        "file_url": f"http://127.0.0.1:8000/files/{filename}"
+    }
 
 Base.metadata.create_all(bind=engine)
 
@@ -71,12 +100,15 @@ def delete_product(id: int):
 
 @app.post("/products/db")
 def add_product_db(product: ProductCreate, db: Session = Depends(get_db)):
-    new_product = Products(
-        id=product.id,
-        name=product.name,
-        description=product.description,
-        image=product.image
-    )
+    product_dict = {
+        "name": product.name,
+        "description": product.description,
+        "image": product.image,
+    }
+    if product.id is not None:
+        product_dict["id"] = product.id
+
+    new_product = Products(**product_dict)
 
     db.add(new_product)
     db.commit()
